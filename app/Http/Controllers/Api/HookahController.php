@@ -7,54 +7,50 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Hookah\CreateRequest;
 use App\Http\Requests\Hookah\ListRequest;
 use App\Http\Requests\Hookah\UpdateRequest;
-use App\Services\HookahService;
+use App\Repositories\Interfaces\HookahRepositoryInterface;
 
 class HookahController extends Controller
 {
-    private $hookahService;
+    private $hookahRepository;
 
-    public function __construct()
+    public function __construct(HookahRepositoryInterface $hookahRepository)
     {
-        $this->hookahService = new HookahService();
+        $this->hookahRepository = $hookahRepository;
     }
 
     public function index()
     {
-        $items = Hookah::query()->get();
-
+        $items = $this->hookahRepository->all();
         return response()->json($items);
     }
 
     public function show(Hookah $hookah)
     {
-        return response()->json($hookah);
+        $item = $this->hookahRepository->getById($hookah->id);
+        return response()->json($item);
     }
 
     public function store(CreateRequest $request)
     {
-        $hookah = Hookah::query()->create($request->all());
-
-        return response()->json($hookah);
+        $item = $this->hookahRepository->create($request->all());
+        return response()->json($item);
     }
 
     public function update(UpdateRequest $request, Hookah $hookah)
     {
-        $hookah->update($request->all());
-
-        return response()->json($hookah);
+        $item = $this->hookahRepository->update($hookah->id, $request->all());
+        return response()->json($item);
     }
 
     public function destroy(Hookah $hookah)
     {
-        $hookah->delete();
-
+        $this->hookahRepository->destroy($hookah->id);
         return response()->json(['status' => 'success'], 200);
     }
 
     public function searchAvailableItems(ListRequest $request)
     {
-        $items = $this->hookahService->getAvailableItems($request->all());
-
+        $items = $this->hookahRepository->getAvailableItems($request->all());
         return response()->json($items);
     }
 }

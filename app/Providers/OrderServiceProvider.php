@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Services\OrderService;
 use Illuminate\Support\ServiceProvider;
+use App\Services\Interfaces\OrderServiceInterface;
 
 class OrderServiceProvider extends ServiceProvider
 {
@@ -14,7 +15,7 @@ class OrderServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(OrderService::class, function () {
+        $this->app->singleton(OrderServiceInterface::class, function () {
             return new OrderService(config('settings.reserve_minutes'));
         });
     }

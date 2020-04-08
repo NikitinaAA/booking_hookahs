@@ -3,13 +3,13 @@
 namespace App\Observers;
 
 use App\Order;
-use App\Services\OrderService;
+use App\Services\Interfaces\OrderServiceInterface;
 
 class OrderObserver
 {
     private $orderService;
 
-    public function __construct(OrderService $orderService)
+    public function __construct(OrderServiceInterface $orderService)
     {
         $this->orderService = $orderService;
     }

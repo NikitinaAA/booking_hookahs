@@ -6,39 +6,44 @@ use App\HookahPlace;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\HookahPlace\CreateRequest;
 use App\Http\Requests\HookahPlace\UpdateRequest;
+use App\Repositories\Interfaces\HookahPlaceRepositoryInterface;
 
 class HookahPlaceController extends Controller
 {
+    private $hookahPlaceRepository;
+
+    public function __construct(HookahPlaceRepositoryInterface $hookahPlaceRepository)
+    {
+        $this->hookahPlaceRepository = $hookahPlaceRepository;
+    }
+
     public function index()
     {
-        $items = HookahPlace::all();
-
+        $items = $this->hookahPlaceRepository->all();
         return response()->json($items);
     }
 
     public function show(HookahPlace $hookahPlace)
     {
-        return response()->json($hookahPlace);
+        $item = $this->hookahPlaceRepository->getById($hookahPlace->id);
+        return response()->json($item);
     }
 
     public function store(CreateRequest $request)
     {
-        $hookahPlace = HookahPlace::query()->create($request->all());
-
-        return response()->json($hookahPlace);
+        $item = $this->hookahPlaceRepository->create($request->all());
+        return response()->json($item);
     }
 
     public function update(UpdateRequest $request, HookahPlace $hookahPlace)
     {
-        $hookahPlace->update($request->all());
-
-        return response()->json($hookahPlace);
+        $item = $this->hookahPlaceRepository->update($hookahPlace->id, $request->all());
+        return response()->json($item);
     }
 
     public function destroy(HookahPlace $hookahPlace)
     {
-        $hookahPlace->delete();
-
+        $this->hookahPlaceRepository->destroy($hookahPlace->id);
         return response()->json(['status' => 'success'], 200);
     }
 }

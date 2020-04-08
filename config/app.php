@@ -179,7 +179,8 @@ return [
          * Custom Service Providers...
          */
         App\Providers\OrderServiceProvider::class,
-        App\Providers\ValidatorServiceProvider::class
+        App\Providers\ValidatorServiceProvider::class,
+        App\Providers\RepositoryServiceProvider::class
     ],
 
     /*

@@ -3,9 +3,10 @@
 namespace App\Services;
 
 use App\Order;
+use App\Services\Interfaces\OrderServiceInterface;
 use Carbon\Carbon;
 
-class OrderService {
+class OrderService implements OrderServiceInterface {
 
     private $reserveMinutes;
 
