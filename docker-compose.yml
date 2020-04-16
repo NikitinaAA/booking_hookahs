@@ -2,7 +2,7 @@ version: "3.3"
 
 services:
   web:
-    container_name: web
+    container_name: ${APP_NAME}_web
     build:
       context: .
       dockerfile: .docker/nginx.Dockerfile
@@ -17,7 +17,7 @@ services:
     build:
       context: .
       dockerfile: .docker/fpm.Dockerfile
-    container_name: app
+    container_name: ${APP_NAME}_app
     working_dir: /var/www
     volumes:
       - ./:/var/www
@@ -30,7 +30,7 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
 
   db:
-    container_name: db
+    container_name: ${APP_NAME}_db
     image: mysql:5.7
     restart: unless-stopped
     tty: true
@@ -41,7 +41,7 @@ services:
       MYSQL_ROOT_PASSWORD: secret
 
   phpmyadmin:
-    container_name: phpmyadmin
+    container_name: ${APP_NAME}_phpmyadmin
     image: phpmyadmin/phpmyadmin
     restart: always
     depends_on:

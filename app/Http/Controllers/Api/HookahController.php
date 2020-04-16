@@ -2,55 +2,53 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Hookah;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ApiController;
+use App\Http\Resources\Hookah\HookahResource;
 use App\Http\Requests\Hookah\CreateRequest;
 use App\Http\Requests\Hookah\ListRequest;
 use App\Http\Requests\Hookah\UpdateRequest;
 use App\Repositories\Interfaces\HookahRepositoryInterface;
 
-class HookahController extends Controller
+class HookahController extends ApiController
 {
-    private $hookahRepository;
-
-    public function __construct(HookahRepositoryInterface $hookahRepository)
+    public function __construct(HookahRepositoryInterface $repository)
     {
-        $this->hookahRepository = $hookahRepository;
+        parent::__construct($repository);
     }
 
     public function index()
     {
-        $items = $this->hookahRepository->all();
-        return response()->json($items);
+        $items = $this->repository->all();
+        return HookahResource::collection($items);
     }
 
-    public function show(Hookah $hookah)
+    public function show($id)
     {
-        $item = $this->hookahRepository->getById($hookah->id);
-        return response()->json($item);
+        $item = $this->repository->findWith($id, ['hookah_place']);
+        return new HookahResource($item);
     }
 
     public function store(CreateRequest $request)
     {
-        $item = $this->hookahRepository->create($request->all());
-        return response()->json($item);
+        $item = $this->repository->create($request->all());
+        return new HookahResource($item);
     }
 
-    public function update(UpdateRequest $request, Hookah $hookah)
+    public function update(UpdateRequest $request, $id)
     {
-        $item = $this->hookahRepository->update($hookah->id, $request->all());
-        return response()->json($item);
+        $item = $this->repository->update($id, $request->all());
+        return new HookahResource($item);
     }
 
-    public function destroy(Hookah $hookah)
+    public function destroy($id)
     {
-        $this->hookahRepository->destroy($hookah->id);
+        $this->repository->destroy($id);
         return response()->json(['status' => 'success'], 200);
     }
 
     public function searchAvailableItems(ListRequest $request)
     {
-        $items = $this->hookahRepository->getAvailableItems($request->all());
+        $items = $this->repository->getAvailableItems($request->all());
         return response()->json($items);
     }
 }

@@ -10,9 +10,19 @@ abstract class BaseRepository implements RepositoryInterface
         return $this->model->all();
     }
 
-    public function getById($id)
+    public function allWith(array $relations)
     {
-        return $this->model->find($id);
+        return $this->model->with($relations)->get();
+    }
+
+    public function find($id)
+    {
+        return $this->model->findOrFail($id);
+    }
+
+    public function findWith($id, array $relations)
+    {
+        return $this->model->with($relations)->findOrFail($id);
     }
 
     public function create(array $attributes)
@@ -22,7 +32,7 @@ abstract class BaseRepository implements RepositoryInterface
 
     public function update($id, array $attributes)
     {
-        $item = $this->getById($id);
+        $item = $this->find($id);
         $item->update($attributes);
         return $item;
     }

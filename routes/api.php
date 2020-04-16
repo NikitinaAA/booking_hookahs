@@ -20,8 +20,6 @@ Route::group([
     Route::get('/hookah/search', 'HookahController@searchAvailableItems');
     Route::apiResource('/hookah', 'HookahController');
 
-    Route::get('/order', 'OrderController@index');
     Route::get('/order/reserved', 'OrderController@getReservedItems');
-    Route::get('/order/{order}', 'OrderController@show');
-    Route::post('/order', 'OrderController@store');
+    Route::apiResource('/order', 'OrderController')->only(['index', 'show', 'store']);
 });

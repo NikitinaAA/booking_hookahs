@@ -24,6 +24,7 @@ class CreateRequest extends BaseRequest
         }
 
         return [
+            'user_name' => 'required|max:20',
             'hookah_id' => 'required|exists:hookah,id|is_available:'.$this->request->get('reserve_at'),
             'person_amount' => 'required|integer|min:1|max:'.$hookah->persons_limit,
             'reserve_at' => 'required|date_format:d-m-Y H:i|after:'.Carbon::now()

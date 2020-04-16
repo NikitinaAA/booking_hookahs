@@ -6,7 +6,11 @@ interface RepositoryInterface
 {
     public function all();
 
-    public function getById($id);
+    public function allWith(array $relations);
+
+    public function find($id);
+
+    public function findWith($id, array $relations);
 
     public function create(array $attributes);
 
